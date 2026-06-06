@@ -259,6 +259,11 @@ body {
   <!-- DATUM + KÖRPERGEWICHT -->
   <div class="test-input-card" style="margin-bottom:0.75rem;display:flex;align-items:center;gap:1.5rem;flex-wrap:wrap;">
     <div style="display:flex;align-items:center;gap:10px;">
+      <div style="font-size:13px;font-weight:600;letter-spacing:0.07em;text-transform:uppercase;color:var(--text3);white-space:nowrap;">Name</div>
+      <input class="test-input-field" type="text" id="inputName" placeholder="z.B. Marco" style="width:140px;">
+    </div>
+    <div style="width:1px;height:28px;background:var(--border2);"></div>
+    <div style="display:flex;align-items:center;gap:10px;">
       <div style="font-size:13px;font-weight:600;letter-spacing:0.07em;text-transform:uppercase;color:var(--text3);white-space:nowrap;">Datum</div>
       <input class="test-input-field" type="date" id="inputDate" style="width:150px;">
     </div>
@@ -424,6 +429,7 @@ body {
         <thead>
           <tr>
             <th>Datum</th>
+            <th>Name</th>
             <th>Gewicht (kg)</th>
             <th>10 min (W)</th>
             <th>3 min (W)</th>
@@ -579,6 +585,7 @@ function saveEntry() {
   const hfmax  = parseInt(document.getElementById('inputHFmax').value)    || 184;
   const hfrest = parseInt(document.getElementById('inputHFrest').value)   || 50;
   const date   = document.getElementById('inputDate').value;
+  const name   = document.getElementById('inputName').value.trim();
   const note   = document.getElementById('inputNote').value.trim();
 
   if (!date) { alert('Bitte ein Datum auswählen.'); return; }
@@ -591,7 +598,7 @@ function saveEntry() {
   const vo2m3  = (p3 * 0.95 / kg) * 10.8 + 7;
   const vo2max = ((vo2m1 + vo2m2 + vo2m3) / 3).toFixed(1);
 
-  const entry = { date, kg, p10, p3, hfmax, hfrest, ftp, wkg, vo2max, note, id: Date.now() };
+  const entry = { date, name, kg, p10, p3, hfmax, hfrest, ftp, wkg, vo2max, note, id: Date.now() };
   const history = getHistory();
   history.unshift(entry);
   saveHistory(history);
@@ -656,6 +663,7 @@ function renderHistory() {
   tbody.innerHTML = sorted.map(e => `
     <tr>
       <td style="white-space:nowrap;">${formatDate(e.date)}</td>
+      <td style="font-size:13px;font-weight:500;color:var(--text);">${e.name || '–'}</td>
       <td>${histInput(e.id, 'kg',     e.kg,     'number', 0.1)}</td>
       <td>${histInput(e.id, 'p3',     e.p3,     'number', 1)}</td>
       <td>${histInput(e.id, 'p10',    e.p10,    'number', 1)}</td>
@@ -752,9 +760,9 @@ function exportCSV() {
   const history = getHistory();
   if (history.length === 0) { alert('Keine Einträge vorhanden.'); return; }
 
-  const header = ['Datum','Gewicht (kg)','3 min (W)','10 min (W)','HFmax (bpm)','Ruhepuls (bpm)','FTP (W)','W/kg','VO2max','Bemerkungen'];
+  const header = ['Datum','Name','Gewicht (kg)','3 min (W)','10 min (W)','HFmax (bpm)','Ruhepuls (bpm)','FTP (W)','W/kg','VO2max','Bemerkungen'];
   const rows = history.map(e => [
-    formatDate(e.date), e.kg, e.p3, e.p10, e.hfmax, e.hfrest, e.ftp,
+    formatDate(e.date), e.name || '', e.kg, e.p3, e.p10, e.hfmax, e.hfrest, e.ftp,
     String(e.wkg).replace('.', ','), e.vo2max, e.note || ''
   ]);
 
