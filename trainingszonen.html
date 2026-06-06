@@ -537,6 +537,16 @@ function calcZones() {
 // Heutiges Datum vorbelegen
 document.getElementById('inputDate').value = new Date().toISOString().split('T')[0];
 
+// Felder mit letztem gespeicherten Eintrag vorbelegen
+const lastEntry = getHistory().sort((a, b) => b.id - a.id)[0];
+if (lastEntry) {
+  document.getElementById('input3min').value   = lastEntry.p3;
+  document.getElementById('input10min').value  = lastEntry.p10;
+  document.getElementById('inputHFmax').value  = lastEntry.hfmax;
+  document.getElementById('inputHFrest').value = lastEntry.hfrest;
+  document.getElementById('inputWeight').value = lastEntry.kg;
+}
+
 calcZones();
 
 // ── HISTORIE ──────────────────────────────────────────────
