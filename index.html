@@ -714,8 +714,21 @@ function importCSV(input) {
     const lines = e.target.result.split('\n').map(l => l.trim()).filter(l => l);
     if (lines.length < 2) { alert('Keine Daten in der Datei gefunden.'); return; }
 
-    // Kopfzeile überspringen, Trennzeichen erkennen
+    // Trennzeichen erkennen
     const sep = lines[0].includes(';') ? ';' : ',';
+    const header = lines[0].split(sep).map(c => c.trim().toLowerCase());
+
+    // Spaltenindizes anhand der Kopfzeile bestimmen (kompatibel mit alten und neuen CSVs)
+    const col = (name) => header.findIndex(h => h.includes(name));
+    const iDatum   = 0;
+    const iName    = col('name');
+    const iKg      = col('gewicht');
+    const iP3      = col('3 min');
+    const iP10     = col('10 min');
+    const iHFmax   = col('hfmax');
+    const iHFrest  = col('ruhepuls');
+    const iNote    = col('bemerkung');
+
     const existing = getHistory();
     const existingKeys = new Set(existing.map(e => e.date + '|' + e.p3 + '|' + e.p10));
 
@@ -724,27 +737,27 @@ function importCSV(input) {
 
     for (let i = 1; i < lines.length; i++) {
       const cols = lines[i].split(sep).map(c => c.trim());
-      // Erwartete Spaltenreihenfolge: Datum, Gewicht, 3min, 10min, HFmax, Ruhepuls, FTP, W/kg, VO2max, Bemerkungen
       if (cols.length < 6) continue;
 
       // Datum: DD.MM.YYYY → YYYY-MM-DD
-      const dateParts = cols[0].split('.');
+      const dateParts = cols[iDatum].split('.');
       if (dateParts.length !== 3) continue;
       const dateIso = `${dateParts[2]}-${dateParts[1].padStart(2,'0')}-${dateParts[0].padStart(2,'0')}`;
 
-      const kg     = parseFloat(cols[1].replace(',', '.'));
-      const p3     = parseInt(cols[2]);
-      const p10    = parseInt(cols[3]);
-      const hfmax  = parseInt(cols[4]);
-      const hfrest = parseInt(cols[5]);
-      const note   = cols[9] || '';
+      const name   = iName  >= 0 ? (cols[iName]  || '') : '';
+      const kg     = parseFloat((cols[iKg]    || '').replace(',', '.'));
+      const p3     = parseInt(cols[iP3]    || '');
+      const p10    = parseInt(cols[iP10]   || '');
+      const hfmax  = parseInt(cols[iHFmax] || '');
+      const hfrest = parseInt(cols[iHFrest]|| '');
+      const note   = iNote >= 0 ? (cols[iNote] || '') : '';
 
       if (isNaN(kg) || isNaN(p3) || isNaN(p10) || isNaN(hfmax) || isNaN(hfrest)) continue;
 
       const key = dateIso + '|' + p3 + '|' + p10;
-      if (existingKeys.has(key)) continue; // Duplikat überspringen
+      if (existingKeys.has(key)) continue;
 
-      const entry = calcEntry({ date: dateIso, kg, p3, p10, hfmax, hfrest, note, id: Date.now() + i });
+      const entry = calcEntry({ date: dateIso, name, kg, p3, p10, hfmax, hfrest, note, id: Date.now() + i });
       newEntries.push(entry);
       existingKeys.add(key);
       added++;
