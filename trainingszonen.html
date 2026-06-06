@@ -618,13 +618,16 @@ function renderHistory() {
       <td><span class="zone-watt">${String(e.wkg).replace('.', ',')}</span></td>
       <td><span class="zone-watt">${e.vo2max}</span></td>
       <td style="max-width:220px;">
-        <input type="text" value="${e.note || ''}" placeholder="–"
-          onchange="updateNote(${e.id}, this.value)"
+        <textarea onchange="updateNote(${e.id}, this.value)"
+          oninput="this.style.height='auto';this.style.height=this.scrollHeight+'px'"
+          onfocus="this.style.borderBottomColor='var(--border2)'"
+          onblur="this.style.borderBottomColor='transparent'"
+          placeholder="–"
           style="background:transparent;border:none;border-bottom:1px solid transparent;
             color:var(--text2);font-family:'DM Sans',sans-serif;font-size:12px;
-            width:100%;outline:none;padding:2px 0;cursor:text;transition:border-color 0.2s;"
-          onfocus="this.style.borderBottomColor='var(--border2)'"
-          onblur="this.style.borderBottomColor='transparent'">
+            width:100%;outline:none;padding:2px 0;cursor:text;transition:border-color 0.2s;
+            resize:none;overflow:hidden;line-height:1.5;"
+        >${e.note || ''}</textarea>
       </td>
       <td>
         <button onclick="deleteEntry(${e.id})" style="
