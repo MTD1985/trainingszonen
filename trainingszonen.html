@@ -256,8 +256,13 @@ body {
 
 <main class="main">
 
-  <!-- KÖRPERGEWICHT -->
+  <!-- DATUM + KÖRPERGEWICHT -->
   <div class="test-input-card" style="margin-bottom:0.75rem;display:flex;align-items:center;gap:1.5rem;flex-wrap:wrap;">
+    <div style="display:flex;align-items:center;gap:10px;">
+      <div style="font-size:13px;font-weight:600;letter-spacing:0.07em;text-transform:uppercase;color:var(--text3);white-space:nowrap;">Datum</div>
+      <input class="test-input-field" type="date" id="inputDate" style="width:150px;">
+    </div>
+    <div style="width:1px;height:28px;background:var(--border2);"></div>
     <div style="font-size:13px;font-weight:600;letter-spacing:0.07em;text-transform:uppercase;color:var(--text3);white-space:nowrap;">Körpergewicht</div>
     <div style="display:flex;align-items:center;gap:10px;">
       <input class="test-input-field" type="number" id="inputWeight" value="84" min="40" max="150" step="0.1" style="width:90px;">
@@ -308,6 +313,17 @@ body {
         <div class="calc-result-sub">ml/kg/min · Ø 3 Methoden</div>
       </div>
     </div>
+  </div>
+
+  <!-- SPEICHERN -->
+  <div style="display:flex;justify-content:flex-end;margin-bottom:1.5rem;">
+    <button id="btnSave" onclick="saveEntry()" style="
+      background:var(--accent);color:#fff;border:none;border-radius:var(--radius-sm);
+      padding:10px 24px;font-family:'DM Sans',sans-serif;font-size:13px;font-weight:600;
+      letter-spacing:0.05em;cursor:pointer;transition:background 0.2s;
+    " onmouseover="this.style.background='var(--accent2)'" onmouseout="this.style.background='var(--accent)'">
+      Eintrag speichern
+    </button>
   </div>
 
   <!-- METRIKEN -->
@@ -371,6 +387,31 @@ body {
         <!-- dynamisch befüllt -->
       </tbody>
     </table>
+  </div>
+
+  <!-- HISTORIE -->
+  <div id="historySection" style="margin-top:2rem;display:none;">
+    <div class="section-title">Historie</div>
+    <div class="section-sub">Gespeicherte Leistungstests · chronologisch</div>
+    <div class="card" style="overflow-x:auto;">
+      <table class="zones-table" id="historyTable">
+        <thead>
+          <tr>
+            <th>Datum</th>
+            <th>Gewicht (kg)</th>
+            <th>10 min (W)</th>
+            <th>3 min (W)</th>
+            <th>HFmax (bpm)</th>
+            <th>Ruhepuls (bpm)</th>
+            <th>FTP (W)</th>
+            <th>W/kg</th>
+            <th>VO2max</th>
+            <th></th>
+          </tr>
+        </thead>
+        <tbody id="historyTableBody"></tbody>
+      </table>
+    </div>
   </div>
 
 </main>
@@ -475,7 +516,96 @@ function calcZones() {
   document.getElementById(id).addEventListener('input', calcZones);
 });
 
+// Heutiges Datum vorbelegen
+document.getElementById('inputDate').value = new Date().toISOString().split('T')[0];
+
 calcZones();
+
+// ── HISTORIE ──────────────────────────────────────────────
+function getHistory() {
+  return JSON.parse(localStorage.getItem('tz_history') || '[]');
+}
+
+function saveHistory(data) {
+  localStorage.setItem('tz_history', JSON.stringify(data));
+}
+
+function formatDate(iso) {
+  const [y, m, d] = iso.split('-');
+  return d + '.' + m + '.' + y;
+}
+
+function saveEntry() {
+  const p10    = parseInt(document.getElementById('input10min').value)    || 306;
+  const p3     = parseInt(document.getElementById('input3min').value)     || 385;
+  const kg     = parseFloat(document.getElementById('inputWeight').value) || 84;
+  const hfmax  = parseInt(document.getElementById('inputHFmax').value)    || 184;
+  const hfrest = parseInt(document.getElementById('inputHFrest').value)   || 50;
+  const date   = document.getElementById('inputDate').value;
+
+  if (!date) { alert('Bitte ein Datum auswählen.'); return; }
+
+  const ftp    = Math.round((p10 * 600 - p3 * 180) / 420);
+  const hfr    = hfmax - hfrest;
+  const wkg    = (ftp / kg).toFixed(2);
+  const vo2m1  = (ftp / 0.76 / kg) * 10.8 + 7;
+  const vo2m2  = 15 * (hfmax / hfrest);
+  const vo2m3  = (p3 * 0.95 / kg) * 10.8 + 7;
+  const vo2max = ((vo2m1 + vo2m2 + vo2m3) / 3).toFixed(1);
+
+  const entry = { date, kg, p10, p3, hfmax, hfrest, ftp, wkg, vo2max, id: Date.now() };
+  const history = getHistory();
+  history.unshift(entry);
+  saveHistory(history);
+  renderHistory();
+
+  // Button-Feedback
+  const btn = document.getElementById('btnSave');
+  btn.textContent = 'Gespeichert ✓';
+  btn.style.background = 'var(--green)';
+  setTimeout(() => { btn.textContent = 'Eintrag speichern'; btn.style.background = 'var(--accent)'; }, 1800);
+}
+
+function deleteEntry(id) {
+  const history = getHistory().filter(e => e.id !== id);
+  saveHistory(history);
+  renderHistory();
+}
+
+function renderHistory() {
+  const history = getHistory();
+  const section = document.getElementById('historySection');
+  const tbody   = document.getElementById('historyTableBody');
+
+  if (history.length === 0) { section.style.display = 'none'; return; }
+  section.style.display = 'block';
+
+  tbody.innerHTML = history.map(e => `
+    <tr>
+      <td style="white-space:nowrap;">${formatDate(e.date)}</td>
+      <td><span class="zone-watt">${e.kg}</span></td>
+      <td><span class="zone-watt">${e.p10}</span></td>
+      <td><span class="zone-watt">${e.p3}</span></td>
+      <td><span class="zone-hf">${e.hfmax}</span></td>
+      <td><span class="zone-hf">${e.hfrest}</span></td>
+      <td><span class="zone-watt" style="color:var(--accent2)">${e.ftp}</span></td>
+      <td><span class="zone-watt">${String(e.wkg).replace('.', ',')}</span></td>
+      <td><span class="zone-watt">${e.vo2max}</span></td>
+      <td>
+        <button onclick="deleteEntry(${e.id})" style="
+          background:transparent;border:1px solid var(--border2);border-radius:6px;
+          color:var(--text3);font-size:11px;padding:4px 8px;cursor:pointer;
+          transition:all 0.2s;
+        " onmouseover="this.style.borderColor='var(--red)';this.style.color='var(--red)'"
+           onmouseout="this.style.borderColor='var(--border2)';this.style.color='var(--text3)'">
+          Löschen
+        </button>
+      </td>
+    </tr>
+  `).join('');
+}
+
+renderHistory();
 </script>
 </body>
 </html>
