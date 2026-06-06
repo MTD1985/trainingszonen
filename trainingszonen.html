@@ -321,7 +321,6 @@ body {
     <div class="metric">
       <div class="metric-label">FTP</div>
       <div class="metric-value" id="metricFTP">–</div>
-      <div class="metric-delta" id="metricFTPDelta">–</div>
     </div>
     <div class="metric">
       <div class="metric-label">HFmax</div>
@@ -387,8 +386,6 @@ body {
 </footer>
 
 <script>
-const BASE_FTP = 270;
-
 // Leistungszonen: Coggan 7-Zonen-Modell (% FTP)
 // HF-Zonen: Karvonen-Modell (% HFR = HFmax − HFRuhe)
 const zonesDef = [
@@ -430,9 +427,7 @@ function calcZones() {
   document.getElementById('calcVO2max').textContent = vo2max;
 
   // Metriken
-  const delta = ftp - BASE_FTP;
   document.getElementById('metricFTP').textContent      = ftp + ' W';
-  document.getElementById('metricFTPDelta').textContent = (delta >= 0 ? '+' : '') + delta + ' W vs. Ausgangswert';
   document.getElementById('metricHFmax').textContent    = hfmax + ' bpm';
   document.getElementById('metricWkg').textContent      = wkg;
   document.getElementById('metricVO2max').textContent   = vo2max;
