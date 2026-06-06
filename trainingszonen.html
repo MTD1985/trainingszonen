@@ -592,7 +592,9 @@ function renderHistory() {
   if (history.length === 0) { section.style.display = 'none'; return; }
   section.style.display = 'block';
 
-  tbody.innerHTML = history.map(e => `
+  const sorted = [...history].sort((a, b) => b.date.localeCompare(a.date));
+
+  tbody.innerHTML = sorted.map(e => `
     <tr>
       <td style="white-space:nowrap;">${formatDate(e.date)}</td>
       <td><span class="zone-watt">${e.kg}</span></td>
