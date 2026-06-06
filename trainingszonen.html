@@ -297,6 +297,10 @@ body {
         <div class="test-input-hint">Morgens gemessen, liegend</div>
       </div>
     </div>
+    <div class="test-input-group" style="margin-top:12px;">
+      <label class="test-input-label">Bemerkungen</label>
+      <input class="test-input-field" type="text" id="inputNote" placeholder="z.B. Testbedingungen, Tagesform, Besonderheiten …" style="width:100%;">
+    </div>
     <div class="calc-result">
       <div class="calc-result-item">
         <div class="calc-result-label">W/kg</div>
@@ -419,6 +423,7 @@ body {
             <th>FTP (W)</th>
             <th>W/kg</th>
             <th>VO2max</th>
+            <th>Bemerkungen</th>
             <th></th>
           </tr>
         </thead>
@@ -555,6 +560,7 @@ function saveEntry() {
   const hfmax  = parseInt(document.getElementById('inputHFmax').value)    || 184;
   const hfrest = parseInt(document.getElementById('inputHFrest').value)   || 50;
   const date   = document.getElementById('inputDate').value;
+  const note   = document.getElementById('inputNote').value.trim();
 
   if (!date) { alert('Bitte ein Datum auswählen.'); return; }
 
@@ -566,7 +572,7 @@ function saveEntry() {
   const vo2m3  = (p3 * 0.95 / kg) * 10.8 + 7;
   const vo2max = ((vo2m1 + vo2m2 + vo2m3) / 3).toFixed(1);
 
-  const entry = { date, kg, p10, p3, hfmax, hfrest, ftp, wkg, vo2max, id: Date.now() };
+  const entry = { date, kg, p10, p3, hfmax, hfrest, ftp, wkg, vo2max, note, id: Date.now() };
   const history = getHistory();
   history.unshift(entry);
   saveHistory(history);
@@ -606,6 +612,7 @@ function renderHistory() {
       <td><span class="zone-watt" style="color:var(--accent2)">${e.ftp}</span></td>
       <td><span class="zone-watt">${String(e.wkg).replace('.', ',')}</span></td>
       <td><span class="zone-watt">${e.vo2max}</span></td>
+      <td style="font-size:12px;color:var(--text2);max-width:200px;">${e.note || '–'}</td>
       <td>
         <button onclick="deleteEntry(${e.id})" style="
           background:transparent;border:1px solid var(--border2);border-radius:6px;
@@ -626,10 +633,10 @@ function exportCSV() {
   const history = getHistory();
   if (history.length === 0) { alert('Keine Einträge vorhanden.'); return; }
 
-  const header = ['Datum','Gewicht (kg)','10 min (W)','3 min (W)','HFmax (bpm)','Ruhepuls (bpm)','FTP (W)','W/kg','VO2max'];
+  const header = ['Datum','Gewicht (kg)','3 min (W)','10 min (W)','HFmax (bpm)','Ruhepuls (bpm)','FTP (W)','W/kg','VO2max','Bemerkungen'];
   const rows = history.map(e => [
-    formatDate(e.date), e.kg, e.p10, e.p3, e.hfmax, e.hfrest, e.ftp,
-    String(e.wkg).replace('.', ','), e.vo2max
+    formatDate(e.date), e.kg, e.p3, e.p10, e.hfmax, e.hfrest, e.ftp,
+    String(e.wkg).replace('.', ','), e.vo2max, e.note || ''
   ]);
 
   const csv = [header, ...rows].map(r => r.join(';')).join('\n');
