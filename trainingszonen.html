@@ -1,0 +1,493 @@
+<!DOCTYPE html>
+<html lang="de">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Trainingszonen – Marco</title>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=DM+Serif+Display:ital@0;1&family=DM+Sans:wght@300;400;500;600&family=DM+Mono:wght@400;500&display=swap" rel="stylesheet">
+<style>
+:root {
+  --bg: #0e1117;
+  --bg2: #161b25;
+  --bg3: #1e2535;
+  --bg4: #252e42;
+  --border: rgba(255,255,255,0.07);
+  --border2: rgba(255,255,255,0.13);
+  --text: #eef0f5;
+  --text2: #8b93a8;
+  --text3: #545e73;
+  --accent: #4f8ef7;
+  --accent2: #7bb3ff;
+  --green: #3ecf8e;
+  --amber: #f59e0b;
+  --red: #f26060;
+  --z1: #3ecf8e;
+  --z2: #4f8ef7;
+  --z3: #a78bfa;
+  --z4: #f59e0b;
+  --z5: #f26060;
+  --z6: #f472b6;
+  --z7: #e879f9;
+  --radius: 12px;
+  --radius-sm: 8px;
+}
+
+*, *::before, *::after { box-sizing: border-box; margin: 0; padding: 0; }
+
+body {
+  font-family: 'DM Sans', sans-serif;
+  background: var(--bg);
+  color: var(--text);
+  min-height: 100vh;
+  font-size: 14px;
+  line-height: 1.6;
+}
+
+/* ── HEADER ── */
+.header {
+  padding: 2rem 2rem 1.75rem;
+  border-bottom: 1px solid var(--border);
+  background: linear-gradient(135deg, #0e1117 60%, #111a2e);
+}
+.header-inner {
+  max-width: 1100px;
+  margin: 0 auto;
+  display: flex;
+  align-items: flex-end;
+  justify-content: space-between;
+  flex-wrap: wrap;
+  gap: 1rem;
+}
+.header-eyebrow {
+  font-size: 11px;
+  font-weight: 600;
+  letter-spacing: 0.12em;
+  text-transform: uppercase;
+  color: var(--accent);
+  margin-bottom: 6px;
+}
+.header-title {
+  font-family: 'DM Serif Display', serif;
+  font-size: clamp(22px, 4vw, 36px);
+  color: var(--text);
+}
+.header-stats { display: flex; gap: 10px; flex-wrap: wrap; }
+.hstat {
+  background: var(--bg3);
+  border: 1px solid var(--border);
+  border-radius: var(--radius-sm);
+  padding: 8px 14px;
+  text-align: center;
+  min-width: 72px;
+}
+.hstat-val { font-family: 'DM Mono', monospace; font-size: 17px; font-weight: 500; color: var(--text); }
+.hstat-label { font-size: 10px; color: var(--text3); margin-top: 2px; }
+
+/* ── MAIN ── */
+.main { max-width: 1100px; margin: 0 auto; padding: 2rem; }
+
+/* ── CARDS ── */
+.card { background: var(--bg2); border: 1px solid var(--border); border-radius: var(--radius); padding: 1.25rem 1.5rem; }
+
+/* ── GRID ── */
+.grid-4 { display: grid; grid-template-columns: repeat(4, 1fr); gap: 12px; }
+@media (max-width: 700px) { .grid-4 { grid-template-columns: repeat(2, 1fr); } }
+
+/* ── METRIC CARD ── */
+.metric { background: var(--bg3); border: 1px solid var(--border); border-radius: var(--radius-sm); padding: 1rem 1.25rem; }
+.metric-label { font-size: 11px; font-weight: 600; letter-spacing: 0.08em; text-transform: uppercase; color: var(--text3); margin-bottom: 6px; }
+.metric-value { font-family: 'DM Mono', monospace; font-size: 22px; font-weight: 500; color: var(--text); }
+.metric-delta { font-size: 12px; color: var(--green); margin-top: 3px; }
+.metric-sub { font-size: 12px; color: var(--text3); margin-top: 3px; }
+
+/* ── SECTION HEADER ── */
+.section-title { font-family: 'DM Serif Display', serif; font-size: 22px; color: var(--text); margin-bottom: 4px; }
+.section-sub { font-size: 13px; color: var(--text2); margin-bottom: 1.5rem; }
+
+/* ── TEST INPUT CARD ── */
+.test-input-card {
+  background: var(--bg2);
+  border: 1px solid var(--border2);
+  border-radius: var(--radius);
+  padding: 1.25rem 1.5rem;
+  margin-bottom: 1rem;
+}
+.test-input-title { font-size: 13px; font-weight: 600; letter-spacing: 0.07em; text-transform: uppercase; color: var(--text3); margin-bottom: 1rem; }
+.test-input-grid {
+  display: grid;
+  grid-template-columns: repeat(4, 1fr);
+  gap: 12px;
+  align-items: end;
+}
+@media (max-width: 800px) { .test-input-grid { grid-template-columns: repeat(2, 1fr); } }
+.test-input-group { display: flex; flex-direction: column; gap: 5px; }
+.test-input-label { font-size: 11px; font-weight: 600; color: var(--text3); letter-spacing: 0.06em; text-transform: uppercase; }
+.test-input-field {
+  background: var(--bg3);
+  border: 1px solid var(--border2);
+  border-radius: var(--radius-sm);
+  color: var(--text);
+  font-family: 'DM Mono', monospace;
+  font-size: 15px;
+  padding: 9px 12px;
+  outline: none;
+  transition: border-color 0.2s;
+  width: 100%;
+}
+.test-input-field:focus { border-color: var(--accent); }
+.test-input-hint { font-size: 11px; color: var(--text3); margin-top: 3px; }
+.calc-result {
+  margin-top: 1rem;
+  padding-top: 1rem;
+  border-top: 1px solid var(--border);
+  display: flex;
+  gap: 24px;
+  flex-wrap: wrap;
+  align-items: center;
+}
+.calc-result-item { }
+.calc-result-label { font-size: 11px; color: var(--text3); text-transform: uppercase; letter-spacing: 0.06em; margin-bottom: 2px; }
+.calc-result-val { font-family: 'DM Mono', monospace; font-size: 20px; font-weight: 500; color: var(--accent2); }
+.calc-result-sub { font-size: 11px; color: var(--text3); margin-top: 1px; }
+
+/* ── ZONE BAR ── */
+.zone-bar-track {
+  height: 32px;
+  border-radius: 6px;
+  background: var(--bg4);
+  overflow: hidden;
+  display: flex;
+  margin: 1rem 0 0.5rem;
+}
+.zone-bar-seg {
+  height: 100%;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  font-family: 'DM Mono', monospace;
+  font-size: 11px;
+  font-weight: 500;
+  color: rgba(255,255,255,0.85);
+  letter-spacing: 0.04em;
+  overflow: hidden;
+  white-space: nowrap;
+}
+.zone-bar-wrapper { position: relative; margin: 1rem 0 2.2rem; }
+.zone-bar-tick {
+  position: absolute;
+  top: calc(100% + 4px);
+  transform: translateX(-50%);
+  font-family: 'DM Mono', monospace;
+  font-size: 10px;
+  color: var(--text3);
+  white-space: nowrap;
+  text-align: center;
+}
+.zone-bar-tick::before {
+  content: '';
+  position: absolute;
+  top: -6px;
+  left: 50%;
+  transform: translateX(-50%);
+  width: 1px;
+  height: 5px;
+  background: var(--border2);
+}
+
+/* ── ZONES TABLE ── */
+.zones-table { width: 100%; border-collapse: collapse; }
+.zones-table th {
+  font-size: 11px; font-weight: 600; letter-spacing: 0.08em; text-transform: uppercase;
+  color: var(--text3); text-align: left; padding: 8px 12px; border-bottom: 1px solid var(--border);
+}
+.zones-table td { padding: 12px 12px; border-bottom: 1px solid var(--border); vertical-align: middle; }
+.zones-table tr:last-child td { border-bottom: none; }
+.zones-table tr:hover td { background: rgba(255,255,255,0.02); }
+.zone-num {
+  font-family: 'DM Mono', monospace; font-size: 13px; font-weight: 500;
+  width: 28px; height: 28px; border-radius: 6px;
+  display: flex; align-items: center; justify-content: center;
+}
+.zone-name-main { font-size: 14px; font-weight: 500; color: var(--text); }
+.zone-name-sub { font-size: 12px; color: var(--text2); margin-top: 2px; }
+.zone-watt { font-family: 'DM Mono', monospace; font-size: 13px; font-weight: 500; color: var(--text); }
+.zone-pct { font-size: 12px; color: var(--text3); }
+.zone-hf { font-family: 'DM Mono', monospace; font-size: 13px; color: var(--text2); }
+
+/* ── FOOTER ── */
+.footer {
+  border-top: 1px solid var(--border);
+  margin-top: 3rem;
+  padding: 1.25rem 2rem;
+  text-align: center;
+  font-size: 12px;
+  color: var(--text3);
+}
+
+@keyframes fadeIn { from { opacity: 0; transform: translateY(6px); } to { opacity: 1; transform: translateY(0); } }
+.main { animation: fadeIn 0.25s ease; }
+</style>
+</head>
+<body>
+
+<header class="header">
+  <div class="header-inner">
+    <div>
+      <div class="header-eyebrow">Leistungsdiagnostik</div>
+      <div class="header-title">Trainingszonen</div>
+    </div>
+    <div class="header-stats">
+      <div class="hstat">
+        <div class="hstat-val" id="headerFTP">–</div>
+        <div class="hstat-label">FTP (W)</div>
+      </div>
+      <div class="hstat">
+        <div class="hstat-val" id="headerWkg">–</div>
+        <div class="hstat-label">W/kg</div>
+      </div>
+      <div class="hstat">
+        <div class="hstat-val" id="headerVO2max">–</div>
+        <div class="hstat-label">VO2max</div>
+      </div>
+    </div>
+  </div>
+</header>
+
+<main class="main">
+
+  <!-- KÖRPERGEWICHT -->
+  <div class="test-input-card" style="margin-bottom:0.75rem;display:flex;align-items:center;gap:1.5rem;flex-wrap:wrap;">
+    <div style="font-size:13px;font-weight:600;letter-spacing:0.07em;text-transform:uppercase;color:var(--text3);white-space:nowrap;">Körpergewicht</div>
+    <div style="display:flex;align-items:center;gap:10px;">
+      <input class="test-input-field" type="number" id="inputWeight" value="84" min="40" max="150" step="0.1" style="width:90px;">
+      <span style="font-size:13px;color:var(--text2);">kg</span>
+    </div>
+    <div style="font-size:12px;color:var(--text3);">Basis für W/kg · FTP-Berechnung · VO2max</div>
+  </div>
+
+  <!-- LEISTUNGSTEST -->
+  <div class="test-input-card">
+    <div class="test-input-title">Leistungstest – Werte eingeben</div>
+    <div class="test-input-grid">
+      <div class="test-input-group">
+        <label class="test-input-label">10 min All-out (W)</label>
+        <input class="test-input-field" type="number" id="input10min" value="306" min="100" max="600">
+        <div class="test-input-hint">Dein 10-min-Durchschnittswert</div>
+      </div>
+      <div class="test-input-group">
+        <label class="test-input-label">3 min All-out (W)</label>
+        <input class="test-input-field" type="number" id="input3min" value="385" min="100" max="800">
+        <div class="test-input-hint">Dein 3-min-Durchschnittswert</div>
+      </div>
+      <div class="test-input-group">
+        <label class="test-input-label">HFmax (bpm)</label>
+        <input class="test-input-field" type="number" id="inputHFmax" value="184" min="140" max="220">
+        <div class="test-input-hint">Gemessene max. HF</div>
+      </div>
+      <div class="test-input-group">
+        <label class="test-input-label">Ruhepuls (bpm)</label>
+        <input class="test-input-field" type="number" id="inputHFrest" value="50" min="30" max="100">
+        <div class="test-input-hint">Morgens gemessen, liegend</div>
+      </div>
+    </div>
+    <div class="calc-result">
+      <div class="calc-result-item">
+        <div class="calc-result-label">FTP</div>
+        <div class="calc-result-val" id="calcFTP">–</div>
+        <div class="calc-result-sub">Critical Power Modell</div>
+      </div>
+      <div class="calc-result-item">
+        <div class="calc-result-label">W/kg</div>
+        <div class="calc-result-val" id="calcWkg">–</div>
+        <div class="calc-result-sub" id="calcWkgSub">–</div>
+      </div>
+      <div class="calc-result-item">
+        <div class="calc-result-label">HF-Reserve</div>
+        <div class="calc-result-val" id="calcHFR">–</div>
+        <div class="calc-result-sub" id="calcHFRsub">HFmax − Ruhepuls</div>
+      </div>
+      <div class="calc-result-item">
+        <div class="calc-result-label">VO2max (Ø)</div>
+        <div class="calc-result-val" id="calcVO2max">–</div>
+        <div class="calc-result-sub">ml/kg/min · Ø 3 Methoden</div>
+      </div>
+    </div>
+  </div>
+
+  <!-- METRIKEN -->
+  <div class="grid-4" style="margin-bottom:1.5rem;">
+    <div class="metric">
+      <div class="metric-label">FTP</div>
+      <div class="metric-value" id="metricFTP">–</div>
+      <div class="metric-delta" id="metricFTPDelta">–</div>
+    </div>
+    <div class="metric">
+      <div class="metric-label">HFmax</div>
+      <div class="metric-value" id="metricHFmax">–</div>
+      <div class="metric-sub">gemessen (Test)</div>
+    </div>
+    <div class="metric">
+      <div class="metric-label">W/kg</div>
+      <div class="metric-value" id="metricWkg">–</div>
+      <div class="metric-sub">Ziel: 3,57</div>
+    </div>
+    <div class="metric">
+      <div class="metric-label">VO2max (Ø)</div>
+      <div class="metric-value" id="metricVO2max">–</div>
+      <div class="metric-sub">ml/kg/min · Ø 3 Methoden</div>
+    </div>
+  </div>
+
+  <!-- ZONENVERTEILUNG -->
+  <div class="card" style="margin-bottom:1.5rem;">
+    <div style="font-size:13px;font-weight:600;letter-spacing:0.07em;text-transform:uppercase;color:var(--text3);margin-bottom:6px;">Zonenverteilung</div>
+    <div class="zone-bar-wrapper">
+      <div class="zone-bar-track">
+        <div class="zone-bar-seg" style="width:12%;background:var(--z1);opacity:0.85;">Z1</div>
+        <div class="zone-bar-seg" style="width:18%;background:var(--z2);opacity:0.85;">Z2</div>
+        <div class="zone-bar-seg" style="width:13%;background:var(--z3);opacity:0.85;">Z3</div>
+        <div class="zone-bar-seg" style="width:13%;background:var(--z4);opacity:0.85;">Z4</div>
+        <div class="zone-bar-seg" style="width:13%;background:var(--z5);opacity:0.85;">Z5</div>
+        <div class="zone-bar-seg" style="width:18%;background:var(--z6);opacity:0.85;">Z6</div>
+        <div class="zone-bar-seg" style="width:13%;background:var(--z7);opacity:0.85;">Z7</div>
+      </div>
+      <span class="zone-bar-tick" style="left:12%"  id="lb1">– W</span>
+      <span class="zone-bar-tick" style="left:30%"  id="lb2">– W</span>
+      <span class="zone-bar-tick" style="left:43%"  id="lb3">– W</span>
+      <span class="zone-bar-tick" style="left:56%"  id="lb4">– W</span>
+      <span class="zone-bar-tick" style="left:69%"  id="lb5">– W</span>
+      <span class="zone-bar-tick" style="left:87%"  id="lb6">– W</span>
+    </div>
+  </div>
+
+  <!-- ZONENTABELLE -->
+  <div class="card">
+    <table class="zones-table">
+      <thead>
+        <tr>
+          <th>Zone</th>
+          <th>Name</th>
+          <th>Watt</th>
+          <th>% FTP</th>
+          <th>HF (bpm)</th>
+        </tr>
+      </thead>
+      <tbody id="zonesTableBody">
+        <!-- dynamisch befüllt -->
+      </tbody>
+    </table>
+  </div>
+
+</main>
+
+<footer class="footer">
+  Trainingszonen · Coggan 7-Zonen · Karvonen HF · Critical Power FTP · VO2max Ø 3 Methoden
+</footer>
+
+<script>
+const BASE_FTP = 270;
+
+// Leistungszonen: Coggan 7-Zonen-Modell (% FTP)
+// HF-Zonen: Karvonen-Modell (% HFR = HFmax − HFRuhe)
+const zonesDef = [
+  { id: 'Z1', name: 'Active Recovery',     sub: 'Aktive Erholung, lockere Recovery Rides',   color: 'var(--z1)', bg: 'rgba(62,207,142,0.15)',  pctLow: 0,   pctHigh: 55,  karvLow: null, karvHigh: 60  },
+  { id: 'Z2', name: 'Endurance',           sub: 'Grundlagenausdauer, Fettstoffwechsel',       color: 'var(--z2)', bg: 'rgba(79,142,247,0.15)',  pctLow: 56,  pctHigh: 75,  karvLow: 60,   karvHigh: 70  },
+  { id: 'Z3', name: 'Tempo',               sub: 'Aerobe Kapazität, Sweet Spot',               color: 'var(--z3)', bg: 'rgba(167,139,250,0.15)', pctLow: 76,  pctHigh: 90,  karvLow: 70,   karvHigh: 80  },
+  { id: 'Z4', name: 'Lactate Threshold',   sub: 'FTP-Intervalle, Schwelle',                   color: 'var(--z4)', bg: 'rgba(245,158,11,0.15)',  pctLow: 91,  pctHigh: 105, karvLow: 80,   karvHigh: 90  },
+  { id: 'Z5', name: 'VO2max',              sub: 'Maximale Sauerstoffaufnahme',                color: 'var(--z5)', bg: 'rgba(242,96,96,0.15)',   pctLow: 106, pctHigh: 120, karvLow: 90,   karvHigh: 95  },
+  { id: 'Z6', name: 'Anaerobic Capacity',  sub: 'Anaerobe Kapazität, kurze Hochintensität',   color: 'var(--z6)', bg: 'rgba(244,114,182,0.15)', pctLow: 121, pctHigh: 150, karvLow: 95,   karvHigh: 100 },
+  { id: 'Z7', name: 'Neuromuscular Power', sub: 'Maximale Sprints, neuromuskuläre Reize',     color: 'var(--z7)', bg: 'rgba(232,121,249,0.15)', pctLow: 151, pctHigh: null, karvLow: 100, karvHigh: null },
+];
+
+function calcZones() {
+  const p10    = parseInt(document.getElementById('input10min').value)   || 306;
+  const p3     = parseInt(document.getElementById('input3min').value)    || 385;
+  const kg     = parseFloat(document.getElementById('inputWeight').value) || 84;
+  const hfmax  = parseInt(document.getElementById('inputHFmax').value)   || 184;
+  const hfrest = parseInt(document.getElementById('inputHFrest').value)  || 50;
+  const hfr    = hfmax - hfrest;
+
+  const karv = pct => Math.min(hfrest + Math.round(pct / 100 * hfr), hfmax);
+
+  // FTP – Critical Power Modell
+  const ftp  = Math.round((p10 * 600 - p3 * 180) / 420);
+  const wkg  = (ftp / kg).toFixed(2).replace('.', ',');
+
+  // VO2max – Mittelwert aus 3 Methoden
+  const vo2m1  = (ftp / 0.76 / kg) * 10.8 + 7;
+  const vo2m2  = 15 * (hfmax / hfrest);
+  const vo2m3  = (p3 * 0.95 / kg) * 10.8 + 7;
+  const vo2max = ((vo2m1 + vo2m2 + vo2m3) / 3).toFixed(1);
+
+  // Ergebnis-Box
+  document.getElementById('calcFTP').textContent    = ftp + ' W';
+  document.getElementById('calcWkg').textContent    = wkg;
+  document.getElementById('calcWkgSub').textContent = 'bei ' + kg + ' kg';
+  document.getElementById('calcHFR').textContent    = hfr + ' bpm';
+  document.getElementById('calcHFRsub').textContent = hfmax + ' − ' + hfrest + ' bpm';
+  document.getElementById('calcVO2max').textContent = vo2max;
+
+  // Metriken
+  const delta = ftp - BASE_FTP;
+  document.getElementById('metricFTP').textContent      = ftp + ' W';
+  document.getElementById('metricFTPDelta').textContent = (delta >= 0 ? '+' : '') + delta + ' W vs. Ausgangswert';
+  document.getElementById('metricHFmax').textContent    = hfmax + ' bpm';
+  document.getElementById('metricWkg').textContent      = wkg;
+  document.getElementById('metricVO2max').textContent   = vo2max;
+
+  // Header
+  document.getElementById('headerFTP').textContent    = ftp;
+  document.getElementById('headerWkg').textContent    = wkg;
+  document.getElementById('headerVO2max').textContent = vo2max;
+
+  // Tabelle
+  const tbody = document.getElementById('zonesTableBody');
+  tbody.innerHTML = zonesDef.map(z => {
+    const wLow  = z.pctLow  ? Math.round(ftp * z.pctLow  / 100) : null;
+    const wHigh = z.pctHigh ? Math.round(ftp * z.pctHigh / 100) : null;
+    const hLow  = z.karvLow  != null ? karv(z.karvLow)  : null;
+    const hHigh = z.karvHigh != null ? karv(z.karvHigh) : null;
+
+    let wattStr, pctStr, hfStr;
+    if (z.id === 'Z1') {
+      wattStr = '&lt; ' + wHigh + ' W';
+      pctStr  = '&lt; ' + z.pctHigh + '%';
+      hfStr   = '&lt; ' + hHigh;
+    } else if (z.id === 'Z7') {
+      wattStr = '&gt; ' + wLow + ' W';
+      pctStr  = '&gt; ' + z.pctLow + '%';
+      hfStr   = '&gt; ' + hLow;
+    } else {
+      wattStr = wLow + ' – ' + wHigh + ' W';
+      pctStr  = z.pctLow + ' – ' + z.pctHigh + '%';
+      hfStr   = hLow + ' – ' + hHigh;
+    }
+
+    return `<tr>
+      <td><div class="zone-num" style="background:${z.bg};color:${z.color};">${z.id}</div></td>
+      <td><div class="zone-name-main">${z.name}</div><div class="zone-name-sub">${z.sub}</div></td>
+      <td><div class="zone-watt">${wattStr}</div></td>
+      <td><div class="zone-pct">${pctStr}</div></td>
+      <td><div class="zone-hf">${hfStr}</div></td>
+    </tr>`;
+  }).join('');
+
+  // Zonen-Bar Labels
+  document.getElementById('lb1').textContent = Math.round(ftp * 0.55) + ' W';
+  document.getElementById('lb2').textContent = Math.round(ftp * 0.75) + ' W';
+  document.getElementById('lb3').textContent = Math.round(ftp * 0.90) + ' W';
+  document.getElementById('lb4').textContent = Math.round(ftp * 1.05) + ' W';
+  document.getElementById('lb5').textContent = Math.round(ftp * 1.20) + ' W';
+  document.getElementById('lb6').textContent = Math.round(ftp * 1.50) + ' W';
+}
+
+['input10min','input3min','inputWeight','inputHFmax','inputHFrest'].forEach(id => {
+  document.getElementById(id).addEventListener('input', calcZones);
+});
+
+calcZones();
+</script>
+</body>
+</html>
