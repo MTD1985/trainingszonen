@@ -622,11 +622,16 @@ function calcEntry(e) {
 }
 
 function updateField(id, field, value) {
-  const parsed  = field === 'kg' ? parseFloat(value) : parseInt(value);
-  if (isNaN(parsed) || parsed <= 0) return;
-  const history = getHistory().map(e => e.id === id ? calcEntry({ ...e, [field]: parsed }) : e);
-  saveHistory(history);
-  renderHistory();
+  let updated;
+  if (field === 'name') {
+    updated = getHistory().map(e => e.id === id ? { ...e, name: value.trim() } : e);
+  } else {
+    const parsed = field === 'kg' ? parseFloat(value) : parseInt(value);
+    if (isNaN(parsed) || parsed <= 0) return;
+    updated = getHistory().map(e => e.id === id ? calcEntry({ ...e, [field]: parsed }) : e);
+  }
+  saveHistory(updated);
+  if (field !== 'name') renderHistory();
 }
 
 function updateNote(id, value) {
@@ -641,7 +646,8 @@ function deleteEntry(id) {
 }
 
 function histInput(id, field, value, type, step) {
-  return `<input type="${type}" value="${value}" step="${step}"
+  const stepAttr = step !== null ? `step="${step}"` : '';
+  return `<input type="${type}" value="${value}" ${stepAttr}
     onchange="updateField(${id}, '${field}', this.value)"
     onfocus="this.style.borderBottomColor='var(--border2)'"
     onblur="this.style.borderBottomColor='transparent'"
@@ -663,7 +669,7 @@ function renderHistory() {
   tbody.innerHTML = sorted.map(e => `
     <tr>
       <td style="white-space:nowrap;">${formatDate(e.date)}</td>
-      <td style="font-size:13px;font-weight:500;color:var(--text);">${e.name || '–'}</td>
+      <td>${histInput(e.id, 'name', e.name || '', 'text', null)}</td>
       <td>${histInput(e.id, 'kg',     e.kg,     'number', 0.1)}</td>
       <td>${histInput(e.id, 'p3',     e.p3,     'number', 1)}</td>
       <td>${histInput(e.id, 'p10',    e.p10,    'number', 1)}</td>
