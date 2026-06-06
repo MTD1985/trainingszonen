@@ -320,8 +320,17 @@ body {
     </div>
   </div>
 
-  <!-- SPEICHERN -->
-  <div style="display:flex;justify-content:flex-end;margin-bottom:1.5rem;">
+  <!-- SPEICHERN / IMPORTIEREN -->
+  <div style="display:flex;justify-content:flex-end;gap:8px;margin-bottom:1.5rem;flex-wrap:wrap;">
+    <label style="
+      background:transparent;border:1px solid var(--border2);border-radius:var(--radius-sm);
+      color:var(--text2);font-family:'DM Sans',sans-serif;font-size:13px;font-weight:500;
+      padding:10px 18px;cursor:pointer;transition:all 0.2s;display:inline-block;
+    " onmouseover="this.style.borderColor='var(--green)';this.style.color='var(--green)'"
+       onmouseout="this.style.borderColor='var(--border2)';this.style.color='var(--text2)'">
+      ↑ CSV importieren
+      <input type="file" accept=".csv" onchange="importCSV(this)" style="display:none;">
+    </label>
     <button id="btnSave" onclick="saveEntry()" style="
       background:var(--accent);color:#fff;border:none;border-radius:var(--radius-sm);
       padding:10px 24px;font-family:'DM Sans',sans-serif;font-size:13px;font-weight:600;
@@ -401,8 +410,7 @@ body {
         <div class="section-title">Historie</div>
         <div class="section-sub" style="margin-bottom:0;">Gespeicherte Leistungstests · chronologisch</div>
       </div>
-      <div style="display:flex;gap:8px;flex-wrap:wrap;">
-        <button onclick="exportCSV()" style="
+      <button onclick="exportCSV()" style="
           background:transparent;border:1px solid var(--border2);border-radius:var(--radius-sm);
           color:var(--text2);font-family:'DM Sans',sans-serif;font-size:13px;font-weight:500;
           padding:8px 18px;cursor:pointer;transition:all 0.2s;
@@ -410,16 +418,6 @@ body {
            onmouseout="this.style.borderColor='var(--border2)';this.style.color='var(--text2)'">
           ↓ CSV exportieren
         </button>
-        <label style="
-          background:transparent;border:1px solid var(--border2);border-radius:var(--radius-sm);
-          color:var(--text2);font-family:'DM Sans',sans-serif;font-size:13px;font-weight:500;
-          padding:8px 18px;cursor:pointer;transition:all 0.2s;display:inline-block;
-        " onmouseover="this.style.borderColor='var(--green)';this.style.color='var(--green)'"
-           onmouseout="this.style.borderColor='var(--border2)';this.style.color='var(--text2)'">
-          ↑ CSV importieren
-          <input type="file" accept=".csv" onchange="importCSV(this)" style="display:none;">
-        </label>
-      </div>
     </div>
     <div class="card" style="overflow-x:auto;">
       <table class="zones-table" id="historyTable">
