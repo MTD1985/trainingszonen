@@ -585,6 +585,24 @@ function saveEntry() {
   setTimeout(() => { btn.textContent = 'Eintrag speichern'; btn.style.background = 'var(--accent)'; }, 1800);
 }
 
+function calcEntry(e) {
+  const ftp    = Math.round((e.p10 * 600 - e.p3 * 180) / 420);
+  const wkg    = (ftp / e.kg).toFixed(2);
+  const vo2m1  = (ftp / 0.76 / e.kg) * 10.8 + 7;
+  const vo2m2  = 15 * (e.hfmax / e.hfrest);
+  const vo2m3  = (e.p3 * 0.95 / e.kg) * 10.8 + 7;
+  const vo2max = ((vo2m1 + vo2m2 + vo2m3) / 3).toFixed(1);
+  return { ...e, ftp, wkg, vo2max };
+}
+
+function updateField(id, field, value) {
+  const parsed  = field === 'kg' ? parseFloat(value) : parseInt(value);
+  if (isNaN(parsed) || parsed <= 0) return;
+  const history = getHistory().map(e => e.id === id ? calcEntry({ ...e, [field]: parsed }) : e);
+  saveHistory(history);
+  renderHistory();
+}
+
 function updateNote(id, value) {
   const history = getHistory().map(e => e.id === id ? { ...e, note: value.trim() } : e);
   saveHistory(history);
@@ -594,6 +612,16 @@ function deleteEntry(id) {
   const history = getHistory().filter(e => e.id !== id);
   saveHistory(history);
   renderHistory();
+}
+
+function histInput(id, field, value, type, step) {
+  return `<input type="${type}" value="${value}" step="${step}"
+    onchange="updateField(${id}, '${field}', this.value)"
+    onfocus="this.style.borderBottomColor='var(--border2)'"
+    onblur="this.style.borderBottomColor='transparent'"
+    style="background:transparent;border:none;border-bottom:1px solid transparent;
+      color:var(--text);font-family:'DM Mono',monospace;font-size:13px;font-weight:500;
+      width:60px;outline:none;padding:2px 0;cursor:text;transition:border-color 0.2s;">`;
 }
 
 function renderHistory() {
@@ -609,11 +637,11 @@ function renderHistory() {
   tbody.innerHTML = sorted.map(e => `
     <tr>
       <td style="white-space:nowrap;">${formatDate(e.date)}</td>
-      <td><span class="zone-watt">${e.kg}</span></td>
-      <td><span class="zone-watt">${e.p10}</span></td>
-      <td><span class="zone-watt">${e.p3}</span></td>
-      <td><span class="zone-hf">${e.hfmax}</span></td>
-      <td><span class="zone-hf">${e.hfrest}</span></td>
+      <td>${histInput(e.id, 'kg',     e.kg,     'number', 0.1)}</td>
+      <td>${histInput(e.id, 'p3',     e.p3,     'number', 1)}</td>
+      <td>${histInput(e.id, 'p10',    e.p10,    'number', 1)}</td>
+      <td>${histInput(e.id, 'hfmax',  e.hfmax,  'number', 1)}</td>
+      <td>${histInput(e.id, 'hfrest', e.hfrest, 'number', 1)}</td>
       <td><span class="zone-watt" style="color:var(--accent2)">${e.ftp}</span></td>
       <td><span class="zone-watt">${String(e.wkg).replace('.', ',')}</span></td>
       <td><span class="zone-watt">${e.vo2max}</span></td>
