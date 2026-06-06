@@ -585,6 +585,11 @@ function saveEntry() {
   setTimeout(() => { btn.textContent = 'Eintrag speichern'; btn.style.background = 'var(--accent)'; }, 1800);
 }
 
+function updateNote(id, value) {
+  const history = getHistory().map(e => e.id === id ? { ...e, note: value.trim() } : e);
+  saveHistory(history);
+}
+
 function deleteEntry(id) {
   const history = getHistory().filter(e => e.id !== id);
   saveHistory(history);
@@ -612,7 +617,15 @@ function renderHistory() {
       <td><span class="zone-watt" style="color:var(--accent2)">${e.ftp}</span></td>
       <td><span class="zone-watt">${String(e.wkg).replace('.', ',')}</span></td>
       <td><span class="zone-watt">${e.vo2max}</span></td>
-      <td style="font-size:12px;color:var(--text2);max-width:200px;">${e.note || '–'}</td>
+      <td style="max-width:220px;">
+        <input type="text" value="${e.note || ''}" placeholder="–"
+          onchange="updateNote(${e.id}, this.value)"
+          style="background:transparent;border:none;border-bottom:1px solid transparent;
+            color:var(--text2);font-family:'DM Sans',sans-serif;font-size:12px;
+            width:100%;outline:none;padding:2px 0;cursor:text;transition:border-color 0.2s;"
+          onfocus="this.style.borderBottomColor='var(--border2)'"
+          onblur="this.style.borderBottomColor='transparent'">
+      </td>
       <td>
         <button onclick="deleteEntry(${e.id})" style="
           background:transparent;border:1px solid var(--border2);border-radius:6px;
