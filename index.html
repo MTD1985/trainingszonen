@@ -560,10 +560,16 @@ body {
 
   <div class="fl-card">
     <div class="fl-section-title">Parameter</div>
+    <div class="fl-type-tabs" id="fl_typeTabs">
+      <button class="fl-type-tab active" data-label="Trainingsausfahrt" data-carbs="60">Trainingsausfahrt</button>
+      <button class="fl-type-tab" data-label="Wettkampf" data-carbs="90">Wettkampf</button>
+      <button class="fl-type-tab" data-label="Intervalleinheit" data-carbs="75">Intervalleinheit</button>
+      <button class="fl-type-tab" data-label="Longride" data-carbs="75">Longride</button>
+    </div>
     <div class="fl-slider-row">
       <span class="fl-slider-label">Carbs/h Ziel</span>
-      <input type="range" min="40" max="160" step="5" value="75" id="fl_carbsPerH">
-      <span class="fl-slider-val"><span id="fl_carbsPerHVal">75</span> g/h</span>
+      <input type="range" min="40" max="160" step="5" value="60" id="fl_carbsPerH">
+      <span class="fl-slider-val"><span id="fl_carbsPerHVal">60</span> g/h</span>
     </div>
     <div class="fl-slider-row">
       <span class="fl-slider-label">Trinkszeit pro Flasche</span>
@@ -612,13 +618,6 @@ body {
 
   <div class="fl-card">
     <div class="fl-section-title">Hochrechnung Einheit / Rennen</div>
-    <div class="fl-type-tabs" id="fl_typeTabs">
-      <button class="fl-type-tab active" data-label="Trainingsausfahrt">Trainingsausfahrt</button>
-      <button class="fl-type-tab" data-label="Wettkampf">Wettkampf</button>
-      <button class="fl-type-tab" data-label="Schwarzwald Ultra">Schwarzwald Ultra</button>
-      <button class="fl-type-tab" data-label="Intervalleinheit">Intervalleinheit</button>
-      <button class="fl-type-tab" data-label="Longride">Longride</button>
-    </div>
     <div class="fl-slider-row" style="margin-bottom:1rem;">
       <span class="fl-slider-label">Dauer der Einheit</span>
       <input type="range" min="0.5" max="15" step="0.5" value="10" id="fl_duration">
@@ -999,6 +998,10 @@ document.getElementById('fl_typeTabs').addEventListener('click', function(e) {
   document.querySelectorAll('.fl-type-tab').forEach(b => b.classList.remove('active'));
   btn.classList.add('active');
   fl_activeLabel = btn.dataset.label;
+  const carbs = parseInt(btn.dataset.carbs);
+  if (carbs) {
+    document.getElementById('fl_carbsPerH').value = carbs;
+  }
   flCalc();
 });
 
