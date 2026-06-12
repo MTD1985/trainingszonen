@@ -1010,8 +1010,6 @@ document.getElementById('fl_typeTabs').addEventListener('click', function(e) {
   fl_activeLabel = btn.dataset.label;
   fl_rangeLow  = parseInt(btn.dataset.low)  || 0;
   fl_rangeHigh = parseInt(btn.dataset.high) || 0;
-  const carbs = parseInt(btn.dataset.carbs);
-  if (carbs) { document.getElementById('fl_carbsPerH').value = carbs; }
   const hint = btn.dataset.hint;
   if (hint) { document.getElementById('fl_typeHint').textContent = hint; }
   flCalc();
