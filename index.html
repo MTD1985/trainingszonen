@@ -625,8 +625,9 @@ body {
       <input type="range" min="0.5" max="15" step="0.5" value="3" id="fl_duration">
       <span class="fl-slider-val"><span id="fl_durationVal">3,0</span> h</span>
     </div>
+    <div class="fl-data-row"><span class="row-label">Kohlenhydrate Ziel</span><span class="row-value" id="fl_carbsPerHDisplay">–</span></div>
+    <div class="fl-data-row"><span class="row-label">Gesamtbedarf</span><span class="row-value" id="fl_totalRaceCarbs">–</span></div>
     <div class="fl-data-row"><span class="row-label">Flaschen gesamt (Carb-Drink)</span><span class="row-value" id="fl_totalBottles">–</span></div>
-    <div class="fl-data-row"><span class="row-label">Carbs gesamt</span><span class="row-value" id="fl_totalRaceCarbs">–</span></div>
     <div class="fl-data-row"><span class="row-label">Maltodextrin gesamt</span><span class="row-value" id="fl_totalMalto">–</span></div>
     <div class="fl-data-row"><span class="row-label">Fructose gesamt</span><span class="row-value" id="fl_totalFruct">–</span></div>
     <div class="fl-data-row"><span class="row-label">Rest über Riegel / Gels</span><span class="row-value"><span class="fl-badge">empfohlen: 30–40 %</span></span></div>
@@ -1060,8 +1061,9 @@ function flCalc() {
   fill.style.background = concPct < 6 ? 'var(--green)' : concPct <= 8 ? 'var(--amber)' : 'var(--red)';
   document.getElementById('fl_concentrationWarning').style.display = concPct > 9 ? 'block' : 'none';
 
-  document.getElementById('fl_unitLabel').textContent       = fl_activeLabel;
-  document.getElementById('fl_totalRaceCarbs').textContent  = totalCarbsRace + ' g';
+  document.getElementById('fl_unitLabel').textContent          = fl_activeLabel;
+  document.getElementById('fl_carbsPerHDisplay').textContent   = Math.round(cph) + ' g/h';
+  document.getElementById('fl_totalRaceCarbs').textContent     = totalCarbsRace + ' g';
   document.getElementById('fl_totalBottles').textContent    = String(bottlesNeeded).replace('.', ',') + ' Flaschen';
   document.getElementById('fl_totalMalto').textContent      = totalMaltoRace + ' g';
   document.getElementById('fl_totalFruct').textContent      = totalFructRace + ' g';
