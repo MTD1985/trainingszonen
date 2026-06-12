@@ -563,14 +563,14 @@ body {
     <div class="fl-type-tabs" id="fl_typeTabs">
       <button class="fl-type-tab active" data-label="Zone 2 Ride" data-carbs="60" data-low="40" data-high="60" data-hint="Z1–Z2 · lockeres Tempo · viel Fettstoffwechsel · 40–60 g/h">Zone 2 Ride</button>
       <button class="fl-type-tab" data-label="Wettkampf" data-carbs="90" data-low="90" data-high="120" data-hint="Z4–Z5 · maximale Leistung · hoher Carbsbedarf · 90–120 g/h">Wettkampf</button>
-      <button class="fl-type-tab" data-label="Intervalleinheit" data-carbs="80" data-low="75" data-high="90" data-hint="Z4 · Schwellenintervalle · erhöhter Carbsbedarf · 75–90 g/h">Intervalleinheit</button>
-      <button class="fl-type-tab" data-label="Longride" data-carbs="75" data-low="60" data-high="80" data-hint="Z2–Z3 · lang und moderat · Glykogen schonen · 60–80 g/h">Longride</button>
+      <button class="fl-type-tab" data-label="Intervalleinheit" data-carbs="75" data-low="75" data-high="90" data-hint="Z4 · Schwellenintervalle · erhöhter Carbsbedarf · 75–90 g/h">Intervalleinheit</button>
+      <button class="fl-type-tab" data-label="Longride" data-carbs="70" data-low="60" data-high="80" data-hint="Z2–Z3 · lang und moderat · Glykogen schonen · 60–80 g/h">Longride</button>
     </div>
     <div id="fl_typeHint" style="font-size:12px;color:var(--text3);margin-bottom:0.9rem;">Z1–Z2 · lockeres Tempo · viel Fettstoffwechsel · 40–60 g/h</div>
     <div class="fl-slider-row">
-      <span class="fl-slider-label">Carbs/h Ziel pro Flasche</span>
-      <input type="range" min="40" max="160" step="5" value="50" id="fl_carbsPerH">
-      <span class="fl-slider-val"><span id="fl_carbsPerHVal">50</span> g/h</span>
+      <span class="fl-slider-label">Carbs pro Flasche</span>
+      <input type="range" min="30" max="150" step="5" value="60" id="fl_carbsPerH">
+      <span class="fl-slider-val"><span id="fl_carbsPerHVal">60</span> g</span>
     </div>
     <div class="fl-slider-row">
       <span class="fl-slider-label">Flaschengröße</span>
@@ -597,7 +597,7 @@ body {
   </div>
 
   <div class="fl-warn-box" id="fl_concentrationWarning">
-    <strong>Hinweis:</strong> Konzentration bei <span id="fl_concPct">–</span> % – das ist hypertonisch. Magenverträglichkeit bei hoher Intensität kann beeinträchtigt sein. Tipp: Flaschengröße erhöhen oder Carbs/h reduzieren.
+    <strong>Hinweis:</strong> Konzentration bei <span id="fl_concPct">–</span> % – das ist hypertonisch. Magenverträglichkeit bei hoher Intensität kann beeinträchtigt sein. Tipp: Flaschengröße erhöhen oder Carbs pro Flasche reduzieren.
   </div>
 
   <div class="fl-card">
@@ -1029,7 +1029,8 @@ function flCalc() {
   document.getElementById('fl_ratioVal').textContent      = r.toFixed(1);
   document.getElementById('fl_durationVal').textContent   = dur.toFixed(1).replace('.', ',');
 
-  const totalCarbsPerBottle = Math.round(cph * (dt / 60));
+  // cph = Carbs pro Flasche (direkt in g), dt = Trinkzeit pro Flasche in min
+  const totalCarbsPerBottle = Math.round(cph);
   const fructPart = r / (1 + r);
   const maltoPart = 1 / (1 + r);
   const malto = Math.round(totalCarbsPerBottle * maltoPart);
@@ -1038,10 +1039,10 @@ function flCalc() {
   const concPct = (totalCarbsPerBottle / bs) * 100;
   const natrium = (bs / 900 * 0.9).toFixed(1);
   const kalium  = (bs / 900 * 0.3).toFixed(1);
-  const totalCarbsRace = Math.round(cph * dur);
-  const totalMaltoRace = Math.round(totalCarbsRace * maltoPart);
-  const totalFructRace = Math.round(totalCarbsRace * fructPart);
-  const bottlesNeeded  = Math.round(totalCarbsRace / totalCarbsPerBottle * 2) / 2;
+  const bottlesNeeded  = Math.round(dur * 60 / dt * 2) / 2;
+  const totalCarbsBottles = Math.round(bottlesNeeded * totalCarbsPerBottle);
+  const totalMaltoRace = Math.round(totalCarbsBottles * maltoPart);
+  const totalFructRace = Math.round(totalCarbsBottles * fructPart);
 
   document.getElementById('fl_maltoG').textContent         = malto + ' g';
   document.getElementById('fl_maltoG2').textContent        = malto;
@@ -1064,7 +1065,6 @@ function flCalc() {
   fill.style.background = concPct < 6 ? 'var(--green)' : concPct <= 8 ? 'var(--amber)' : 'var(--red)';
   document.getElementById('fl_concentrationWarning').style.display = concPct > 9 ? 'block' : 'none';
 
-  const totalCarbsBottles = Math.round(bottlesNeeded * totalCarbsPerBottle);
   const restLow  = Math.max(0, Math.round(fl_rangeLow  * dur) - totalCarbsBottles);
   const restHigh = Math.max(0, Math.round(fl_rangeHigh * dur) - totalCarbsBottles);
 
