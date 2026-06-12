@@ -617,16 +617,16 @@ body {
   </div>
 
   <div class="fl-card">
-    <div class="fl-section-title">Hochrechnung Einheit / Rennen</div>
-    <div class="fl-slider-row" style="margin-bottom:1rem;">
-      <span class="fl-slider-label">Dauer der Einheit</span>
-      <input type="range" min="0.5" max="15" step="0.5" value="10" id="fl_duration">
-      <span class="fl-slider-val"><span id="fl_durationVal">10,0</span> h</span>
-    </div>
+    <div class="fl-section-title">Hochrechnung</div>
     <div class="fl-data-row"><span class="row-label">Einheit / Typ</span><span class="row-value" id="fl_unitLabel">Trainingsausfahrt</span></div>
+    <div class="fl-slider-row" style="margin:0.75rem 0;">
+      <span class="fl-slider-label">Dauer der Einheit</span>
+      <input type="range" min="0.5" max="15" step="0.5" value="3" id="fl_duration">
+      <span class="fl-slider-val"><span id="fl_durationVal">3,0</span> h</span>
+    </div>
     <div class="fl-data-row"><span class="row-label">Dauer</span><span class="row-value" id="fl_durationDisplay">–</span></div>
-    <div class="fl-data-row"><span class="row-label">Carbs gesamt</span><span class="row-value" id="fl_totalRaceCarbs">–</span></div>
     <div class="fl-data-row"><span class="row-label">Flaschen gesamt (Carb-Drink)</span><span class="row-value" id="fl_totalBottles">–</span></div>
+    <div class="fl-data-row"><span class="row-label">Carbs gesamt</span><span class="row-value" id="fl_totalRaceCarbs">–</span></div>
     <div class="fl-data-row"><span class="row-label">Maltodextrin gesamt</span><span class="row-value" id="fl_totalMalto">–</span></div>
     <div class="fl-data-row"><span class="row-label">Fructose gesamt</span><span class="row-value" id="fl_totalFruct">–</span></div>
     <div class="fl-data-row"><span class="row-label">Rest über Riegel / Gels</span><span class="row-value"><span class="fl-badge">empfohlen: 30–40 %</span></span></div>
@@ -1037,7 +1037,7 @@ function flCalc() {
   const totalCarbsRace = Math.round(cph * dur);
   const totalMaltoRace = Math.round(totalCarbsRace * maltoPart);
   const totalFructRace = Math.round(totalCarbsRace * fructPart);
-  const bottlesNeeded  = Math.ceil(totalCarbsRace / totalCarbsPerBottle);
+  const bottlesNeeded  = Math.round(totalCarbsRace / totalCarbsPerBottle * 2) / 2;
 
   document.getElementById('fl_maltoG').textContent         = malto + ' g';
   document.getElementById('fl_maltoG2').textContent        = malto;
@@ -1063,7 +1063,7 @@ function flCalc() {
   document.getElementById('fl_unitLabel').textContent       = fl_activeLabel;
   document.getElementById('fl_durationDisplay').textContent = flFormatDuration(dur);
   document.getElementById('fl_totalRaceCarbs').textContent  = totalCarbsRace + ' g';
-  document.getElementById('fl_totalBottles').textContent    = bottlesNeeded + ' Flaschen';
+  document.getElementById('fl_totalBottles').textContent    = String(bottlesNeeded).replace('.', ',') + ' Flaschen';
   document.getElementById('fl_totalMalto').textContent      = totalMaltoRace + ' g';
   document.getElementById('fl_totalFruct').textContent      = totalFructRace + ' g';
 }
