@@ -227,6 +227,105 @@ body {
 
 @keyframes fadeIn { from { opacity: 0; transform: translateY(6px); } to { opacity: 1; transform: translateY(0); } }
 .main { animation: fadeIn 0.25s ease; }
+
+/* ── TABS ── */
+.tab-nav {
+  display: flex;
+  gap: 4px;
+  padding: 0 2rem;
+  border-bottom: 1px solid var(--border);
+  background: var(--bg2);
+  max-width: 100%;
+  overflow-x: auto;
+}
+.tab-btn {
+  font-family: 'DM Sans', sans-serif;
+  font-size: 13px;
+  font-weight: 500;
+  color: var(--text3);
+  background: transparent;
+  border: none;
+  border-bottom: 2px solid transparent;
+  padding: 12px 16px;
+  cursor: pointer;
+  transition: color 0.15s, border-color 0.15s;
+  white-space: nowrap;
+  letter-spacing: 0.02em;
+}
+.tab-btn:hover { color: var(--text2); }
+.tab-btn.active { color: var(--accent2); border-bottom-color: var(--accent); }
+.tab-panel { display: none; }
+.tab-panel.active { display: block; }
+
+/* ── FLASCHENRECHNER ── */
+.fl-card {
+  background: var(--bg2);
+  border: 1px solid var(--border);
+  border-radius: var(--radius);
+  padding: 1.25rem 1.5rem;
+  margin-bottom: 1rem;
+}
+.fl-section-title {
+  font-size: 11px; font-weight: 600; letter-spacing: 0.08em;
+  text-transform: uppercase; color: var(--text3); margin-bottom: 1.1rem;
+}
+.fl-slider-row {
+  display: flex; align-items: center; gap: 12px; margin-bottom: 0.9rem;
+}
+.fl-slider-row:last-child { margin-bottom: 0; }
+.fl-slider-label { font-size: 13px; color: var(--text2); min-width: 175px; }
+.fl-slider-row input[type="range"] {
+  flex: 1; height: 4px; -webkit-appearance: none; appearance: none;
+  background: var(--bg4); border-radius: 2px; outline: none; cursor: pointer;
+}
+.fl-slider-row input[type="range"]::-webkit-slider-thumb {
+  -webkit-appearance: none; width: 18px; height: 18px; border-radius: 50%;
+  background: var(--accent); border: 2px solid var(--bg2);
+  box-shadow: 0 0 0 1px var(--accent); cursor: pointer;
+}
+.fl-slider-val { font-size: 13px; font-weight: 600; color: var(--text); min-width: 80px; text-align: right; }
+.fl-metrics-grid {
+  display: grid; grid-template-columns: repeat(auto-fit, minmax(130px, 1fr));
+  gap: 10px; margin-bottom: 1rem;
+}
+.fl-metric-card { background: var(--bg3); border-radius: var(--radius-sm); padding: 0.85rem 1rem; }
+.fl-metric-card .m-label { font-size: 12px; color: var(--text2); margin-bottom: 3px; }
+.fl-metric-card .m-value { font-size: 20px; font-weight: 600; color: var(--text); line-height: 1.2; }
+.fl-metric-card .m-sub { font-size: 11px; color: var(--text3); margin-top: 2px; }
+.fl-data-row {
+  display: flex; justify-content: space-between; align-items: center;
+  padding: 8px 0; border-bottom: 1px solid var(--border); font-size: 14px; gap: 12px;
+}
+.fl-data-row:last-child { border-bottom: none; }
+.fl-data-row .row-label { color: var(--text2); flex-shrink: 0; }
+.fl-data-row .row-value { font-weight: 500; color: var(--text); text-align: right; }
+.fl-warn-box {
+  display: none; background: rgba(245,158,11,0.1); border-left: 3px solid var(--amber);
+  border-radius: 0 var(--radius-sm) var(--radius-sm) 0;
+  padding: 10px 14px; font-size: 13px; color: var(--amber); margin-bottom: 1rem; line-height: 1.6;
+}
+.fl-tip-box {
+  background: rgba(79,142,247,0.08); border-left: 3px solid var(--accent);
+  border-radius: 0 var(--radius-sm) var(--radius-sm) 0;
+  padding: 10px 14px; font-size: 13px; color: var(--text2); margin-top: 1rem; line-height: 1.6;
+}
+.fl-type-tabs { display: flex; gap: 6px; flex-wrap: wrap; margin-bottom: 1.1rem; }
+.fl-type-tab {
+  font-size: 13px; padding: 5px 13px; border-radius: 20px;
+  border: 1px solid var(--border2); background: transparent; color: var(--text2);
+  cursor: pointer; transition: all 0.15s; font-family: 'DM Sans', sans-serif;
+}
+.fl-type-tab:hover { background: var(--bg3); color: var(--text); }
+.fl-type-tab.active { background: rgba(79,142,247,0.1); border-color: var(--accent); color: var(--accent2); font-weight: 600; }
+.fl-badge {
+  display: inline-block; font-size: 12px; padding: 3px 10px; border-radius: 20px;
+  font-weight: 500; background: rgba(79,142,247,0.1); color: var(--accent2);
+}
+.fl-conc-bar-wrap { margin: 0.75rem 0 0.25rem; }
+.fl-conc-bar-label { font-size: 12px; color: var(--text2); margin-bottom: 5px; display: flex; justify-content: space-between; }
+.fl-conc-bar-track { height: 6px; background: var(--bg4); border-radius: 3px; overflow: hidden; }
+.fl-conc-bar-fill { height: 100%; border-radius: 3px; transition: width 0.2s, background 0.2s; }
+.fl-conc-zones { display: flex; font-size: 10px; color: var(--text3); margin-top: 3px; justify-content: space-between; }
 </style>
 </head>
 <body>
@@ -254,6 +353,12 @@ body {
   </div>
 </header>
 
+<nav class="tab-nav">
+  <button class="tab-btn active" onclick="switchTab('trainingszonen', this)">Trainingszonen</button>
+  <button class="tab-btn" onclick="switchTab('flaschenrechner', this)">Flaschenrechner</button>
+</nav>
+
+<div id="tab-trainingszonen" class="tab-panel active">
 <main class="main">
 
   <!-- DATUM + KÖRPERGEWICHT -->
@@ -448,6 +553,88 @@ body {
   </div>
 
 </main>
+</div><!-- end tab-trainingszonen -->
+
+<div id="tab-flaschenrechner" class="tab-panel">
+<div style="max-width:1100px;margin:0 auto;padding:2rem;">
+
+  <div class="fl-card">
+    <div class="fl-section-title">Parameter</div>
+    <div class="fl-slider-row">
+      <span class="fl-slider-label">Carbs/h Ziel</span>
+      <input type="range" min="40" max="160" step="5" value="75" id="fl_carbsPerH">
+      <span class="fl-slider-val"><span id="fl_carbsPerHVal">75</span> g/h</span>
+    </div>
+    <div class="fl-slider-row">
+      <span class="fl-slider-label">Trinkszeit pro Flasche</span>
+      <input type="range" min="30" max="120" step="15" value="90" id="fl_drinkTime">
+      <span class="fl-slider-val"><span id="fl_drinkTimeVal">90</span> min</span>
+    </div>
+    <div class="fl-slider-row">
+      <span class="fl-slider-label">Flaschengröße</span>
+      <input type="range" min="200" max="2000" step="100" value="900" id="fl_bottleSize">
+      <span class="fl-slider-val"><span id="fl_bottleSizeVal">900</span> ml</span>
+    </div>
+    <div class="fl-slider-row">
+      <span class="fl-slider-label">Verhältnis Malto : Fruc</span>
+      <input type="range" min="0.5" max="1" step="0.1" value="0.8" id="fl_ratio">
+      <span class="fl-slider-val">1 : <span id="fl_ratioVal">0.8</span></span>
+    </div>
+  </div>
+
+  <div class="fl-metrics-grid">
+    <div class="fl-metric-card"><div class="m-label">Maltodextrin</div><div class="m-value" id="fl_maltoG">–</div><div class="m-sub">g pro Flasche</div></div>
+    <div class="fl-metric-card"><div class="m-label">Fructose</div><div class="m-value" id="fl_fructG">–</div><div class="m-sub">g pro Flasche</div></div>
+    <div class="fl-metric-card"><div class="m-label">Carbs gesamt</div><div class="m-value" id="fl_totalCarbsCard">–</div><div class="m-sub">g pro Flasche</div></div>
+    <div class="fl-metric-card"><div class="m-label">Kalorien</div><div class="m-value" id="fl_kcal">–</div><div class="m-sub">kcal pro Flasche</div></div>
+  </div>
+
+  <div class="fl-warn-box" id="fl_concentrationWarning">
+    <strong>Hinweis:</strong> Konzentration bei <span id="fl_concPct">–</span> % – das ist hypertonisch. Magenverträglichkeit bei hoher Intensität kann beeinträchtigt sein. Tipp: Flaschengröße erhöhen oder Carbs/h reduzieren.
+  </div>
+
+  <div class="fl-card">
+    <div class="fl-section-title">Zubereitung pro <span id="fl_bottleSizeLabel">900</span> ml Flasche</div>
+    <div class="fl-data-row"><span class="row-label">Maltodextrin</span><span class="row-value"><span id="fl_maltoG2">–</span> g</span></div>
+    <div class="fl-data-row"><span class="row-label">Fructose</span><span class="row-value"><span id="fl_fructG2">–</span> g</span></div>
+    <div class="fl-data-row"><span class="row-label">Natrium (z. B. Salz)</span><span class="row-value">~ <span id="fl_natriumVal">–</span> g</span></div>
+    <div class="fl-data-row"><span class="row-label">Kalium (z. B. Lite Salt)</span><span class="row-value">~ <span id="fl_kaliumVal">–</span> g</span></div>
+    <div class="fl-data-row"><span class="row-label">Wasser</span><span class="row-value"><span id="fl_waterLabel">900</span> ml</span></div>
+    <div class="fl-conc-bar-wrap">
+      <div class="fl-conc-bar-label"><span>Konzentration (Carbs)</span><span id="fl_concDisplay">–</span></div>
+      <div class="fl-conc-bar-track"><div class="fl-conc-bar-fill" id="fl_concBarFill" style="width:0%"></div></div>
+      <div class="fl-conc-zones"><span>hypoton &lt; 6 %</span><span>isoton 6–8 %</span><span>hyperton &gt; 8 %</span></div>
+    </div>
+    <div class="fl-tip-box">
+      <strong>Tipp:</strong> Erst Pulver in ~200 ml warmem Wasser auflösen, dann auf <span id="fl_bottleSizeTip">900</span> ml auffüllen. Gut schütteln. Isotonisch (6–8 %) ist für die meisten Einheiten ideal.
+    </div>
+  </div>
+
+  <div class="fl-card">
+    <div class="fl-section-title">Hochrechnung Einheit / Rennen</div>
+    <div class="fl-type-tabs" id="fl_typeTabs">
+      <button class="fl-type-tab active" data-label="Trainingsausfahrt">Trainingsausfahrt</button>
+      <button class="fl-type-tab" data-label="Wettkampf">Wettkampf</button>
+      <button class="fl-type-tab" data-label="Schwarzwald Ultra">Schwarzwald Ultra</button>
+      <button class="fl-type-tab" data-label="Intervalleinheit">Intervalleinheit</button>
+      <button class="fl-type-tab" data-label="Longride">Longride</button>
+    </div>
+    <div class="fl-slider-row" style="margin-bottom:1rem;">
+      <span class="fl-slider-label">Dauer der Einheit</span>
+      <input type="range" min="0.5" max="15" step="0.5" value="10" id="fl_duration">
+      <span class="fl-slider-val"><span id="fl_durationVal">10,0</span> h</span>
+    </div>
+    <div class="fl-data-row"><span class="row-label">Einheit / Typ</span><span class="row-value" id="fl_unitLabel">Trainingsausfahrt</span></div>
+    <div class="fl-data-row"><span class="row-label">Dauer</span><span class="row-value" id="fl_durationDisplay">–</span></div>
+    <div class="fl-data-row"><span class="row-label">Carbs gesamt</span><span class="row-value" id="fl_totalRaceCarbs">–</span></div>
+    <div class="fl-data-row"><span class="row-label">Flaschen gesamt (Carb-Drink)</span><span class="row-value" id="fl_totalBottles">–</span></div>
+    <div class="fl-data-row"><span class="row-label">Maltodextrin gesamt</span><span class="row-value" id="fl_totalMalto">–</span></div>
+    <div class="fl-data-row"><span class="row-label">Fructose gesamt</span><span class="row-value" id="fl_totalFruct">–</span></div>
+    <div class="fl-data-row"><span class="row-label">Rest über Riegel / Gels</span><span class="row-value"><span class="fl-badge">empfohlen: 30–40 %</span></span></div>
+  </div>
+
+</div>
+</div><!-- end tab-flaschenrechner -->
 
 <footer class="footer">
   Trainingszonen · Coggan 7-Zonen · Karvonen HF · Critical Power FTP · VO2max Ø 3 Methoden
@@ -794,6 +981,94 @@ function exportCSV() {
   a.click();
   URL.revokeObjectURL(url);
 }
+
+// ── TAB-UMSCHALTUNG ──────────────────────────────────────
+function switchTab(id, btn) {
+  document.querySelectorAll('.tab-panel').forEach(p => p.classList.remove('active'));
+  document.querySelectorAll('.tab-btn').forEach(b => b.classList.remove('active'));
+  document.getElementById('tab-' + id).classList.add('active');
+  btn.classList.add('active');
+}
+
+// ── FLASCHENRECHNER ──────────────────────────────────────
+let fl_activeLabel = 'Trainingsausfahrt';
+
+document.getElementById('fl_typeTabs').addEventListener('click', function(e) {
+  const btn = e.target.closest('.fl-type-tab');
+  if (!btn) return;
+  document.querySelectorAll('.fl-type-tab').forEach(b => b.classList.remove('active'));
+  btn.classList.add('active');
+  fl_activeLabel = btn.dataset.label;
+  flCalc();
+});
+
+function flFormatDuration(h) {
+  const hours = Math.floor(h);
+  const mins = Math.round((h - hours) * 60);
+  if (mins === 0) return hours + ' h';
+  return hours + ' h ' + mins + ' min';
+}
+
+function flCalc() {
+  const cph = parseFloat(document.getElementById('fl_carbsPerH').value);
+  const dt  = parseFloat(document.getElementById('fl_drinkTime').value);
+  const r   = parseFloat(document.getElementById('fl_ratio').value);
+  const bs  = parseFloat(document.getElementById('fl_bottleSize').value);
+  const dur = parseFloat(document.getElementById('fl_duration').value);
+
+  document.getElementById('fl_carbsPerHVal').textContent  = Math.round(cph);
+  document.getElementById('fl_drinkTimeVal').textContent  = Math.round(dt);
+  document.getElementById('fl_bottleSizeVal').textContent = Math.round(bs);
+  document.getElementById('fl_ratioVal').textContent      = r.toFixed(1);
+  document.getElementById('fl_durationVal').textContent   = dur.toFixed(1).replace('.', ',');
+
+  const totalCarbsPerBottle = Math.round(cph * (dt / 60));
+  const fructPart = r / (1 + r);
+  const maltoPart = 1 / (1 + r);
+  const malto = Math.round(totalCarbsPerBottle * maltoPart);
+  const fruct = Math.round(totalCarbsPerBottle * fructPart);
+  const kcalVal = Math.round(totalCarbsPerBottle * 4);
+  const concPct = (totalCarbsPerBottle / bs) * 100;
+  const natrium = (bs / 900 * 0.9).toFixed(1);
+  const kalium  = (bs / 900 * 0.3).toFixed(1);
+  const totalCarbsRace = Math.round(cph * dur);
+  const totalMaltoRace = Math.round(totalCarbsRace * maltoPart);
+  const totalFructRace = Math.round(totalCarbsRace * fructPart);
+  const bottlesNeeded  = Math.ceil(totalCarbsRace / totalCarbsPerBottle);
+
+  document.getElementById('fl_maltoG').textContent         = malto + ' g';
+  document.getElementById('fl_maltoG2').textContent        = malto;
+  document.getElementById('fl_fructG').textContent         = fruct + ' g';
+  document.getElementById('fl_fructG2').textContent        = fruct;
+  document.getElementById('fl_totalCarbsCard').textContent = totalCarbsPerBottle + ' g';
+  document.getElementById('fl_kcal').textContent           = kcalVal + ' kcal';
+  document.getElementById('fl_natriumVal').textContent     = natrium;
+  document.getElementById('fl_kaliumVal').textContent      = kalium;
+  document.getElementById('fl_waterLabel').textContent     = Math.round(bs);
+  document.getElementById('fl_bottleSizeLabel').textContent = Math.round(bs);
+  document.getElementById('fl_bottleSizeTip').textContent  = Math.round(bs);
+
+  const concStr = concPct.toFixed(1);
+  document.getElementById('fl_concDisplay').textContent = concStr + ' %';
+  document.getElementById('fl_concPct').textContent     = concStr;
+  const barPct = Math.min(concPct / 15 * 100, 100);
+  const fill = document.getElementById('fl_concBarFill');
+  fill.style.width = barPct.toFixed(1) + '%';
+  fill.style.background = concPct < 6 ? 'var(--green)' : concPct <= 8 ? 'var(--amber)' : 'var(--red)';
+  document.getElementById('fl_concentrationWarning').style.display = concPct > 9 ? 'block' : 'none';
+
+  document.getElementById('fl_unitLabel').textContent       = fl_activeLabel;
+  document.getElementById('fl_durationDisplay').textContent = flFormatDuration(dur);
+  document.getElementById('fl_totalRaceCarbs').textContent  = totalCarbsRace + ' g';
+  document.getElementById('fl_totalBottles').textContent    = bottlesNeeded + ' Flaschen';
+  document.getElementById('fl_totalMalto').textContent      = totalMaltoRace + ' g';
+  document.getElementById('fl_totalFruct').textContent      = totalFructRace + ' g';
+}
+
+['fl_carbsPerH','fl_drinkTime','fl_bottleSize','fl_ratio','fl_duration'].forEach(id => {
+  document.getElementById(id).addEventListener('input', flCalc);
+});
+flCalc();
 </script>
 </body>
 </html>
