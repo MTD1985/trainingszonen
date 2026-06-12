@@ -1070,7 +1070,9 @@ function flCalc() {
 
   document.getElementById('fl_unitLabel').textContent        = fl_activeLabel;
   document.getElementById('fl_carbsPerHDisplay').textContent = fl_rangeLow + '–' + fl_rangeHigh + ' g/h';
-  document.getElementById('fl_totalRaceCarbs').textContent   = Math.round(fl_rangeLow * dur) + '–' + Math.round(fl_rangeHigh * dur) + ' g';
+  const totalKcalLow  = Math.round(fl_rangeLow  * dur * 4);
+  const totalKcalHigh = Math.round(fl_rangeHigh * dur * 4);
+  document.getElementById('fl_totalRaceCarbs').textContent   = Math.round(fl_rangeLow * dur) + '–' + Math.round(fl_rangeHigh * dur) + ' g  (' + totalKcalLow + '–' + totalKcalHigh + ' kcal)';
   document.getElementById('fl_totalBottles').textContent     = String(bottlesNeeded).replace('.', ',') + ' Flaschen (' + totalCarbsBottles + ' g)';
   document.getElementById('fl_totalMalto').textContent       = totalMaltoRace + ' g';
   document.getElementById('fl_totalFruct').textContent       = totalFructRace + ' g';
