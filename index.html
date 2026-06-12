@@ -1061,7 +1061,6 @@ function flCalc() {
   document.getElementById('fl_concentrationWarning').style.display = concPct > 9 ? 'block' : 'none';
 
   document.getElementById('fl_unitLabel').textContent       = fl_activeLabel;
-  document.getElementById('fl_durationDisplay').textContent = flFormatDuration(dur);
   document.getElementById('fl_totalRaceCarbs').textContent  = totalCarbsRace + ' g';
   document.getElementById('fl_totalBottles').textContent    = String(bottlesNeeded).replace('.', ',') + ' Flaschen';
   document.getElementById('fl_totalMalto').textContent      = totalMaltoRace + ' g';
