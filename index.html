@@ -561,10 +561,10 @@ body {
   <div class="fl-card">
     <div class="fl-section-title">Parameter</div>
     <div class="fl-type-tabs" id="fl_typeTabs">
-      <button class="fl-type-tab active" data-label="Zone 2 Ride" data-carbs="60" data-hint="Z1–Z2 · lockeres Tempo · viel Fettstoffwechsel · 40–60 g/h">Zone 2 Ride</button>
-      <button class="fl-type-tab" data-label="Wettkampf" data-carbs="90" data-hint="Z4–Z5 · maximale Leistung · hoher Carbsbedarf · 90–120 g/h">Wettkampf</button>
-      <button class="fl-type-tab" data-label="Intervalleinheit" data-carbs="75" data-hint="Z4 · Schwellenintervalle · erhöhter Carbsbedarf · 75–90 g/h">Intervalleinheit</button>
-      <button class="fl-type-tab" data-label="Longride" data-carbs="75" data-hint="Z2–Z3 · lang und moderat · Glykogen schonen · 60–80 g/h">Longride</button>
+      <button class="fl-type-tab active" data-label="Zone 2 Ride" data-carbs="60" data-low="40" data-high="60" data-hint="Z1–Z2 · lockeres Tempo · viel Fettstoffwechsel · 40–60 g/h">Zone 2 Ride</button>
+      <button class="fl-type-tab" data-label="Wettkampf" data-carbs="90" data-low="90" data-high="120" data-hint="Z4–Z5 · maximale Leistung · hoher Carbsbedarf · 90–120 g/h">Wettkampf</button>
+      <button class="fl-type-tab" data-label="Intervalleinheit" data-carbs="75" data-low="75" data-high="90" data-hint="Z4 · Schwellenintervalle · erhöhter Carbsbedarf · 75–90 g/h">Intervalleinheit</button>
+      <button class="fl-type-tab" data-label="Longride" data-carbs="75" data-low="60" data-high="80" data-hint="Z2–Z3 · lang und moderat · Glykogen schonen · 60–80 g/h">Longride</button>
     </div>
     <div id="fl_typeHint" style="font-size:12px;color:var(--text3);margin-bottom:0.9rem;">Z1–Z2 · lockeres Tempo · viel Fettstoffwechsel · 40–60 g/h</div>
     <div class="fl-slider-row">
@@ -630,7 +630,7 @@ body {
     <div class="fl-data-row"><span class="row-label">Flaschen gesamt (Carb-Drink)</span><span class="row-value" id="fl_totalBottles">–</span></div>
     <div class="fl-data-row"><span class="row-label">Maltodextrin gesamt</span><span class="row-value" id="fl_totalMalto">–</span></div>
     <div class="fl-data-row"><span class="row-label">Fructose gesamt</span><span class="row-value" id="fl_totalFruct">–</span></div>
-    <div class="fl-data-row"><span class="row-label">Rest über Riegel / Gels</span><span class="row-value"><span class="fl-badge">empfohlen: 30–40 %</span></span></div>
+    <div class="fl-data-row"><span class="row-label">Rest über Riegel / Gels</span><span class="row-value" id="fl_restGels">–</span></div>
   </div>
 
 </div>
@@ -991,7 +991,8 @@ function switchTab(id, btn) {
 }
 
 // ── FLASCHENRECHNER ──────────────────────────────────────
-let fl_activeLabel = 'Trainingsausfahrt';
+let fl_activeLabel = 'Zone 2 Ride';
+let fl_rangeLow = 40, fl_rangeHigh = 60;
 
 document.getElementById('fl_typeTabs').addEventListener('click', function(e) {
   const btn = e.target.closest('.fl-type-tab');
@@ -999,6 +1000,8 @@ document.getElementById('fl_typeTabs').addEventListener('click', function(e) {
   document.querySelectorAll('.fl-type-tab').forEach(b => b.classList.remove('active'));
   btn.classList.add('active');
   fl_activeLabel = btn.dataset.label;
+  fl_rangeLow  = parseInt(btn.dataset.low)  || 0;
+  fl_rangeHigh = parseInt(btn.dataset.high) || 0;
   const carbs = parseInt(btn.dataset.carbs);
   if (carbs) { document.getElementById('fl_carbsPerH').value = carbs; }
   const hint = btn.dataset.hint;
@@ -1061,12 +1064,17 @@ function flCalc() {
   fill.style.background = concPct < 6 ? 'var(--green)' : concPct <= 8 ? 'var(--amber)' : 'var(--red)';
   document.getElementById('fl_concentrationWarning').style.display = concPct > 9 ? 'block' : 'none';
 
-  document.getElementById('fl_unitLabel').textContent          = fl_activeLabel;
-  document.getElementById('fl_carbsPerHDisplay').textContent   = Math.round(cph) + ' g/h';
-  document.getElementById('fl_totalRaceCarbs').textContent     = totalCarbsRace + ' g';
-  document.getElementById('fl_totalBottles').textContent    = String(bottlesNeeded).replace('.', ',') + ' Flaschen';
-  document.getElementById('fl_totalMalto').textContent      = totalMaltoRace + ' g';
-  document.getElementById('fl_totalFruct').textContent      = totalFructRace + ' g';
+  const totalCarbsBottles = Math.round(bottlesNeeded * totalCarbsPerBottle);
+  const restLow  = Math.max(0, Math.round(fl_rangeLow  * dur) - totalCarbsBottles);
+  const restHigh = Math.max(0, Math.round(fl_rangeHigh * dur) - totalCarbsBottles);
+
+  document.getElementById('fl_unitLabel').textContent        = fl_activeLabel;
+  document.getElementById('fl_carbsPerHDisplay').textContent = fl_rangeLow + '–' + fl_rangeHigh + ' g/h';
+  document.getElementById('fl_totalRaceCarbs').textContent   = Math.round(fl_rangeLow * dur) + '–' + Math.round(fl_rangeHigh * dur) + ' g';
+  document.getElementById('fl_totalBottles').textContent     = String(bottlesNeeded).replace('.', ',') + ' Flaschen (' + totalCarbsBottles + ' g)';
+  document.getElementById('fl_totalMalto').textContent       = totalMaltoRace + ' g';
+  document.getElementById('fl_totalFruct').textContent       = totalFructRace + ' g';
+  document.getElementById('fl_restGels').textContent         = restLow + '–' + restHigh + ' g über Riegel / Gels';
 }
 
 ['fl_carbsPerH','fl_drinkTime','fl_bottleSize','fl_ratio','fl_duration'].forEach(id => {
